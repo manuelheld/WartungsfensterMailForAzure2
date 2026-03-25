@@ -20,19 +20,40 @@ function App() {
             try {
                 // Azure Static Web Apps / App Service "Easy Auth" endpoint
                 const response = await fetch('/.auth/me');
+                if (!response.ok) throw new Error('Auth fetch failed');
                 const payload = await response.json();
-                if (payload && payload.clientPrincipal) {
-                    setCurrentUser(payload.clientPrincipal.userDetails);
-                } else {
-                    // Fallback for local development
-                    if (window.location.hostname === 'localhost') {
-                        setCurrentUser('Manuel Held (Local Dev)');
+                
+                let username = null;
+
+                // Handle Azure Static Web Apps format
+                if (payload?.clientPrincipal?.userDetails) {
+                    username = payload.clientPrincipal.userDetails;
+                } 
+                // Handle Azure App Service format
+                else if (Array.isArray(payload) && payload.length > 0) {
+                    const claims = payload[0].claims || [];
+                    const nameClaim = claims.find((c: any) => 
+                        c.typ === 'name' || 
+                        c.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' ||
+                        c.typ === 'preferred_username'
+                    );
+                    
+                    if (nameClaim && nameClaim.val) {
+                        username = nameClaim.val;
+                    } else if (payload[0].user_id) {
+                        username = payload[0].user_id;
                     }
                 }
+
+                if (username) {
+                    setCurrentUser(username);
+                } else if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    setCurrentUser('Manuel Held (Local Dev)');
+                }
             } catch (error) {
-                console.log('Not running in Azure or Auth not enabled');
+                console.log('Not running in Azure or Auth not enabled', error);
                 // Fallback for local development
-                if (window.location.hostname === 'localhost') {
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                     setCurrentUser('Manuel Held (Local Dev)');
                 }
             }
