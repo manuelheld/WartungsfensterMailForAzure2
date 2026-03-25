@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Copy, Download, CheckCircle2, MailOpen } from 'lucide-react';
 import { generateEml } from '../services/emailService';
+import { zfLogoBase64 } from '../services/zfLogoBase64';
 
 interface EmailPreviewProps {
     html: string;
@@ -10,14 +11,17 @@ interface EmailPreviewProps {
 const EmailPreview: React.FC<EmailPreviewProps> = ({ html, onClose }) => {
     const [copied, setCopied] = React.useState(false);
 
+    // Replace the CID reference with a Base64 data URI for web preview, copy, and HTML download
+    const webHtml = html.replace('cid:zf-logo', `data:image/png;base64,${zfLogoBase64}`);
+
     const handleCopy = () => {
-        navigator.clipboard.writeText(html);
+        navigator.clipboard.writeText(webHtml);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
 
     const handleDownload = () => {
-        const blob = new Blob([html], { type: 'text/html' });
+        const blob = new Blob([webHtml], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -90,7 +94,7 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ html, onClose }) => {
                 <div className="flex-1 overflow-auto p-8 bg-gray-100/30">
                     <div className="bg-white shadow-sm rounded-2xl overflow-hidden min-h-full max-w-[800px] mx-auto border border-gray-100">
                         <iframe
-                            srcDoc={html}
+                            srcDoc={webHtml}
                             className="w-full h-full min-h-[600px] border-none"
                             title="Email Preview"
                         />

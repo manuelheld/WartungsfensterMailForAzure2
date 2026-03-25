@@ -1,5 +1,6 @@
 import { MaintenanceItem } from '../types';
 import ouSitesData from '../data/ouSites.json';
+import { zfLogoBase64 } from './zfLogoBase64';
 import { formatToAMPM } from '../utils/timeUtils';
 
 const ouSites: Record<string, string[]> = ouSitesData;
@@ -147,12 +148,19 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
 
   return `
 <html>
-<body style="font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 0; background-color: white;">
-  <!-- Header with ZF Logo and dynamic titles -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding: 20px 40px; background-color: white; border-bottom: 2px solid #002D58;">
+<body style="font-family: Tahoma, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 0; background-color: #f5f5f7;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f5f5f7; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <!-- Main Email Container -->
+        <table width="800" cellpadding="0" cellspacing="0" border="0" style="background-color: white; border: 1px solid #d1d5db; border-radius: 4px; max-width: 800px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          <tr>
+            <td>
+              <!-- Header with ZF Logo and dynamic titles -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding: 20px 40px; background-color: white; border-bottom: 2px solid #002D58;">
     <tr>
       <td width="80" align="left" style="vertical-align: middle;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/ZF_logo_STD_Blue_3CC.svg/250px-ZF_logo_STD_Blue_3CC.svg.png" width="80" alt="ZF Logo" style="display: block; border: 0;" />
+        <img src="cid:zf-logo" width="80" alt="ZF Logo" style="display: block; border: 0;" />
       </td>
       <td align="left" style="padding: 0 40px; vertical-align: middle;">
         <div style="font-size: 24px; color: #002D58; font-weight: 500;">
@@ -194,6 +202,12 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
       <strong>ZF Group - IT Maintenance Team</strong>
     </p>
   </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
   `.trim();
@@ -201,11 +215,15 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
 
 export const generateEml = (html: string): string => {
   const boundary = `----=_NextPart_${Math.random().toString(36).slice(2)}`;
+  const relatedBoundary = `----=_RelatedPart_${Math.random().toString(36).slice(2)}`;
   const subject = "IT Maintenance Window / IT - Wartungsfenster";
 
   return [
     `Subject: ${subject}`,
     'MIME-Version: 1.0',
+    `Content-Type: multipart/related; boundary="${relatedBoundary}"`,
+    '',
+    `--${relatedBoundary}`,
     `Content-Type: multipart/alternative; boundary="${boundary}"`,
     '',
     `--${boundary}`,
@@ -220,6 +238,16 @@ export const generateEml = (html: string): string => {
     '',
     btoa(unescape(encodeURIComponent(html))),
     '',
-    `--${boundary}--`
+    `--${boundary}--`,
+    '',
+    `--${relatedBoundary}`,
+    'Content-Type: image/png; name="zf-logo.png"',
+    'Content-Transfer-Encoding: base64',
+    'Content-ID: <zf-logo>',
+    'Content-Disposition: inline; filename="zf-logo.png"',
+    '',
+    zfLogoBase64,
+    '',
+    `--${relatedBoundary}--`
   ].join('\r\n');
 };
