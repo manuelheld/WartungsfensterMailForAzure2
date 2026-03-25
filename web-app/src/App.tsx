@@ -54,8 +54,32 @@ function App() {
                             username = "No Name Claim Found";
                         }
                     }
+                } else if (typeof payload === 'object' && payload !== null) {
+                    // Handle case where Azure returns a single object instead of an array,
+                    // or a flat OpenID Connect UserInfo object
+                    const claims = payload.claims || [];
+                    const nameClaim = claims.find((c: any) => 
+                        c.typ === 'name' || 
+                        c.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' ||
+                        c.typ === 'preferred_username'
+                    );
+                    
+                    if (nameClaim && nameClaim.val) {
+                        username = nameClaim.val;
+                    } else if (payload.name) {
+                        username = payload.name;
+                    } else if (payload.preferred_username) {
+                        username = payload.preferred_username;
+                    } else if (payload.user_id) {
+                        username = payload.user_id;
+                    } else if (payload.email) {
+                        username = payload.email;
+                    } else {
+                        // Diagnostic: Show the keys of the JSON object so we know what's in there
+                        username = `Keys: ${Object.keys(payload).join(', ')}`.substring(0, 35);
+                    }
                 } else {
-                    username = "Unknown Format";
+                    username = `Type: ${typeof payload}`;
                 }
 
                 if (username) {
