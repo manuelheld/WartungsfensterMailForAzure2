@@ -41,18 +41,18 @@ const ExcelUploader: React.FC<ExcelUploaderProps> = ({ onDataLoaded, isLoading, 
         <div
             {...getRootProps()}
             className={`
-        bg-white rounded-3xl shadow-xl border-4 border-dashed p-12 transition-all cursor-pointer
-        ${isDragActive ? 'border-zf-blue bg-zf-blue/5 scale-[1.02]' : 'border-gray-100 hover:border-zf-blue/20 hover:shadow-2xl'}
+        bg-white rounded-sm shadow-sm border-2 border-dashed p-12 transition-all cursor-pointer
+        ${isDragActive ? 'border-zf-cyan bg-zf-cyan/5 scale-[1.01]' : 'border-gray-300 hover:border-zf-cyan hover:shadow-md'}
       `}
         >
             <input {...getInputProps()} />
             <div className="flex flex-col items-center justify-center py-10 px-4 group">
                 <div className={`
-          p-6 rounded-full mb-6 transition-all duration-500
-          ${isDragActive ? 'bg-zf-blue text-white shadow-xl rotate-12' : 'bg-zf-blue/5 text-zf-blue group-hover:bg-zf-blue/10'}
+          p-6 rounded-full mb-6 transition-all duration-300
+          ${isDragActive ? 'bg-zf-cyan text-white shadow-md scale-110' : 'bg-zf-cyan/10 text-zf-cyan group-hover:bg-zf-cyan/20'}
         `}>
                     {isLoading ? (
-                        <div className="w-12 h-12 border-4 border-zf-blue border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-12 h-12 border-4 border-zf-cyan border-t-transparent rounded-full animate-spin"></div>
                     ) : (
                         <FileUp className="w-12 h-12" />
                     )}
@@ -66,13 +66,13 @@ const ExcelUploader: React.FC<ExcelUploaderProps> = ({ onDataLoaded, isLoading, 
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <button className="bg-zf-blue text-white font-bold py-4 px-10 rounded-xl hover:bg-zf-lightBlue transition-all transform hover:-translate-y-1 active:scale-95 shadow-lg flex items-center gap-2">
+                    <button className="bg-zf-cyan text-white font-semibold py-3 px-8 rounded-sm hover:bg-zf-lightBlue transition-colors flex items-center gap-2 uppercase tracking-wide text-sm">
                         Datei auswählen <ChevronRight className="w-5 h-5" />
                     </button>
                     {hasStoredData && onRestore && (
                         <button
                             onClick={(e) => { e.stopPropagation(); onRestore(); }}
-                            className="bg-white border-2 border-zf-blue text-zf-blue font-bold py-3.5 px-8 rounded-xl hover:bg-zf-blue/5 transition-all transform hover:-translate-y-1 active:scale-95 shadow-md flex items-center gap-2"
+                            className="bg-white border-2 border-zf-cyan text-zf-blue font-semibold py-2.5 px-8 rounded-sm hover:bg-zf-gray transition-colors flex items-center gap-2 uppercase tracking-wide text-sm"
                         >
                             <RotateCcw className="w-5 h-5" /> Letzte Datei laden
                         </button>

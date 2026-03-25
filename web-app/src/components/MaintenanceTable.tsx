@@ -70,43 +70,39 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
         }
     };
     return (
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        {/* Row 1: Controls & Filters - In HEAD */}
-                        <tr className="sticky top-[30px] z-50 bg-white border-b border-gray-100 shadow-sm">
-                            <th colSpan={7} className="p-0 font-normal">
-                                <div className="px-6 h-[72px] flex items-center justify-between">
-                                    <div className="flex flex-row flex-wrap items-center gap-3">
+        <div className="bg-white rounded-sm shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+            {/* Row 1: Controls & Filters - OUTSIDE table scroll container */}
+            <div className="sticky top-[72px] z-40 bg-white border-b border-gray-100 shadow-sm w-full">
+                <div className="px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex flex-row flex-wrap items-center gap-3">
                                         <button
                                             onClick={onBack}
-                                            className="flex items-center gap-2 text-gray-500 hover:text-zf-blue transition-colors group font-bold bg-white border border-gray-200 py-1.5 px-4 rounded-xl shrink-0 text-xs"
+                                            className="flex items-center gap-2 text-gray-500 hover:text-zf-blue transition-colors group font-semibold bg-white border border-gray-200 py-1.5 px-3 rounded-sm text-xs uppercase"
                                         >
                                             <ArrowLeft className="w-4 h-4" />
                                             Zurück
                                         </button>
-                                        <div className="flex items-center gap-2 bg-zf-blue/5 px-3 py-1.5 rounded-xl border border-zf-blue/10 shrink-0">
-                                            <Calendar className="w-4 h-4 text-zf-blue" />
-                                            <span className="font-bold text-zf-blue uppercase tracking-wider text-[10px]">Monat:</span>
+                                        <div className="flex items-center gap-2 bg-zf-cyan/10 px-3 py-1.5 border-l-2 border-zf-cyan shrink-0">
+                                            <Calendar className="w-4 h-4 text-zf-darkBlue" />
+                                            <span className="font-semibold text-zf-darkBlue uppercase tracking-wider text-[10px]">Monat:</span>
                                         </div>
                                         <select
                                             value={selectedMonth}
                                             onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                                            className="bg-white border border-gray-200 text-gray-900 font-bold py-1.5 px-4 rounded-xl focus:ring-2 focus:ring-zf-blue/10 outline-none transition-all cursor-pointer text-xs"
+                                            className="bg-white border border-gray-200 text-zf-darkBlue font-semibold py-1.5 px-3 focus:outline-none focus:border-zf-cyan transition-colors cursor-pointer text-xs"
                                         >
                                             {MONTHS.map((month, idx) => (
                                                 <option key={idx} value={idx}>{month}</option>
                                             ))}
                                         </select>
-                                        <div className="flex items-center gap-2 bg-zf-blue/5 px-3 py-1.5 rounded-xl border border-zf-blue/10 shrink-0">
-                                            <Filter className="w-4 h-4 text-zf-blue" />
-                                            <span className="font-bold text-zf-blue uppercase tracking-wider text-[10px]">Division:</span>
+                                        <div className="flex items-center gap-2 bg-zf-cyan/10 px-3 py-1.5 border-l-2 border-zf-cyan shrink-0">
+                                            <Filter className="w-4 h-4 text-zf-darkBlue" />
+                                            <span className="font-semibold text-zf-darkBlue uppercase tracking-wider text-[10px]">Division:</span>
                                         </div>
                                         <select
                                             value={selectedDivision}
                                             onChange={(e) => setSelectedDivision(e.target.value)}
-                                            className="bg-white border border-gray-200 text-gray-900 font-bold py-1.5 px-4 rounded-xl focus:ring-2 focus:ring-zf-blue/10 outline-none transition-all cursor-pointer text-xs"
+                                            className="bg-white border border-gray-200 text-zf-darkBlue font-semibold py-1.5 px-3 focus:outline-none focus:border-zf-cyan transition-colors cursor-pointer text-xs"
                                         >
                                             <option value="Alle">Alle</option>
                                             {divisions.map((div, idx) => (
@@ -115,7 +111,7 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                                         </select>
                                         <button
                                             onClick={() => setShowOnlyDowntime(!showOnlyDowntime)}
-                                            className={`font-bold py-1.5 px-4 rounded-xl border transition-all flex items-center gap-2 text-xs ${showOnlyDowntime ? 'bg-zf-blue text-white border-zf-blue shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:border-zf-blue/30'}`}
+                                            className={`font-semibold py-1.5 px-3 transition-colors flex items-center gap-2 text-xs uppercase cursor-pointer ${showOnlyDowntime ? 'bg-zf-cyan text-white border-zf-cyan' : 'bg-white text-gray-500 border border-gray-200 hover:border-zf-cyan/50'}`}
                                         >
                                             Nur mit Downtime
                                         </button>
@@ -124,19 +120,19 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                                     <div className="flex items-center gap-6">
                                         <div className="text-right shrink-0">
                                             <div className="flex items-baseline gap-1">
-                                                <span className="text-2xl font-black text-gray-900 leading-none">{selectedCount}</span>
-                                                <span className="text-gray-300 text-sm font-bold">/ {filteredItems.length}</span>
+                                                <span className="text-xl font-bold text-zf-darkBlue leading-none">{selectedCount}</span>
+                                                <span className="text-gray-400 text-sm font-semibold">/ {filteredItems.length}</span>
                                             </div>
-                                            <p className="text-[10px] font-bold text-zf-blue uppercase tracking-widest leading-none mt-1">Ausgewählt</p>
+                                            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest mt-0.5">Ausgewählt</p>
                                         </div>
                                         <button
                                             onClick={() => onGenerateEmail(selectedDivision)}
                                             disabled={selectedCount === 0}
                                             className={`
-                                                font-bold py-2.5 px-6 rounded-xl flex items-center gap-2 transition-all transform active:scale-95 text-xs shadow-lg
+                                                font-semibold py-2 px-6 flex items-center gap-2 uppercase tracking-wide text-xs transition-colors
                                                 ${selectedCount > 0
-                                                    ? 'bg-zf-blue text-white hover:bg-zf-lightBlue shadow-zf-blue/20'
-                                                    : 'bg-gray-100 text-gray-300 cursor-not-allowed'}
+                                                    ? 'bg-zf-cyan text-white hover:bg-zf-lightBlue'
+                                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'}
                                             `}
                                         >
                                             <Mail className="w-4 h-4" />
@@ -144,28 +140,32 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                                         </button>
                                     </div>
                                 </div>
-                            </th>
+                            </div>
+
+            {/* Table Area with Horizontal Scroll */}
+            <div className="overflow-x-auto w-full">
+                <table className="w-full text-left border-collapse min-w-[1000px]">
+                    <thead className="bg-gray-50 border-b border-gray-200 shadow-sm">
+                        {/* Row 2: Column Headers */}
+                        <tr>
+                            <th className="px-4 py-3 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Select</th>
+                            <th className="px-4 py-3 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em] min-w-[200px]">Description (D)</th>
+                            <th className="px-4 py-3 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em] min-w-[200px]">Time (CET)</th>
+                            <th className="px-4 py-3 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Downtime</th>
+                            <th className="px-4 py-3 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Lokationen</th>
+                            <th className="px-4 py-3 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Impact (I)</th>
+                            <th className="px-4 py-3 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Other (J)</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
-                        {/* Row 2: Column Headers - In BODY for height reservation */}
-                        <tr className="sticky top-[80px] z-40 bg-gray-50 border-b border-gray-200 shadow-sm">
-                            <th className="px-8 py-5 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Select</th>
-                            <th className="px-8 py-5 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em] min-w-[200px]">Description (D)</th>
-                            <th className="px-8 py-5 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em] min-w-[200px]">Time (CET)</th>
-                            <th className="px-8 py-5 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Downtime</th>
-                            <th className="px-8 py-5 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Lokationen</th>
-                            <th className="px-8 py-5 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Impact (I)</th>
-                            <th className="px-8 py-5 font-black text-gray-400 uppercase text-[10px] tracking-[0.3em]">Other (J)</th>
-                        </tr>
                         {sortedDateKeys.map((dateKey) => (
                             <React.Fragment key={dateKey}>
                                 {/* Date Group Header */}
-                                <tr className="bg-zf-blue/5 border-l-4 border-zf-blue">
-                                    <td colSpan={7} className="px-8 py-4">
+                                <tr className="bg-white border-l-4 border-zf-darkBlue border-t border-gray-100">
+                                    <td colSpan={7} className="px-4 py-2 bg-gray-50/50">
                                         <div className="flex items-center gap-3">
-                                            <Calendar className="w-5 h-5 text-zf-blue" />
-                                            <span className="text-sm font-black text-gray-900 uppercase tracking-widest">
+                                            <Calendar className="w-5 h-5 text-zf-darkBlue" />
+                                            <span className="text-xs font-bold text-zf-darkBlue uppercase tracking-widest">
                                                 {formatDateBilingual(dateKey)}
                                             </span>
                                         </div>
@@ -182,15 +182,15 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                               ${item.isSelected ? 'bg-zf-blue/5' : 'hover:bg-gray-50/80'}
                             `}
                                         >
-                                            <td className="px-8 py-6 cursor-pointer" onClick={() => onToggleSelect(originalIndex)}>
+                                            <td className="px-4 py-3 cursor-pointer" onClick={() => onToggleSelect(originalIndex)}>
                                                 <div className={`
-                                w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300
-                                ${item.isSelected ? 'bg-zf-blue text-white shadow-lg shadow-zf-blue/30 scale-110' : 'border-2 border-gray-200 group-hover:border-zf-blue/30 group-hover:scale-105 bg-white'}
+                                w-6 h-6 border-2 flex items-center justify-center transition-colors
+                                ${item.isSelected ? 'bg-zf-cyan border-zf-cyan text-white' : 'border-gray-300 group-hover:border-zf-cyan bg-white'}
                               `}>
-                                                    {item.isSelected ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5 text-transparent" />}
+                                                    {item.isSelected ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4 text-transparent" />}
                                                 </div>
                                             </td>
-                                    <td className="px-8 py-6">
+                                    <td className="px-4 py-3">
                                         <div className="font-semibold text-zf-blue mb-1 line-clamp-1">{item.notes}</div>
                                         <div className="font-bold text-gray-900 text-[13px] mb-1">
                                             {item.dayLink ? (
@@ -205,8 +205,8 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                                             {item.taskNr}
                                         </div>
                                     </td>
-                                    <td className="px-8 py-6 text-gray-600 font-bold text-[13px] bg-gray-50/30 whitespace-nowrap">{item.timeDisplay || '-'}</td>
-                                    <td className="px-8 py-6">
+                                    <td className="px-4 py-3 text-gray-600 font-bold text-[12px] bg-gray-50/30 whitespace-nowrap">{item.timeDisplay || '-'}</td>
+                                    <td className="px-4 py-3">
                                         {item.hasDowntime ? (
                                             <span className="inline-block px-3 py-1 bg-red-50 text-red-600 border border-red-200 rounded-lg text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">
                                                 {item.downtimeDuration || 'Ja'}
@@ -215,7 +215,7 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                                             <span className="text-gray-300 ml-4">-</span>
                                         )}
                                     </td>
-                                    <td className="px-8 py-6">
+                                    <td className="px-4 py-3">
                                         <div className="flex flex-wrap gap-1">
                                             {/* Show ONLY extracted locations from Column J that match the selected division (or all if Alle) */}
                                             {item.locations && item.locations.length > 0 ? (
@@ -247,7 +247,7 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                                         </div>
                                     </td>
                                     <td
-                                        className="px-8 py-6 cursor-pointer hover:bg-zf-blue/5 transition-colors group/cell"
+                                        className="px-4 py-3 cursor-pointer hover:bg-zf-blue/5 transition-colors group/cell"
                                         onClick={() => setEditingCell({
                                             index: originalIndex,
                                             field: 'impact',
@@ -263,7 +263,7 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                                         </div>
                                     </td>
                                     <td
-                                        className="px-8 py-6 cursor-pointer hover:bg-zf-blue/5 transition-colors group/cell"
+                                        className="px-4 py-3 cursor-pointer hover:bg-zf-blue/5 transition-colors group/cell"
                                         onClick={() => setEditingCell({
                                             index: originalIndex,
                                             field: 'otherImpacts',
@@ -283,7 +283,7 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                         ))}
                         {filteredItems.length === 0 && (
                             <tr>
-                                <td colSpan={8} className="px-8 py-20 text-center">
+                                <td colSpan={8} className="px-4 py-16 text-center">
                                     <div className="flex flex-col items-center gap-4">
                                         <Calendar className="w-12 h-12 text-gray-200" />
                                         <p className="text-gray-400 font-bold text-xl">Keine Termine für diesen Monat gefunden.</p>
@@ -297,8 +297,8 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
 
             {/* Editing Modal */}
             {editingCell && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm">
-                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
+                    <div className="bg-white shadow-xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
                         <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
                             <h3 className="text-xl font-bold text-gray-900">{editingCell?.title}</h3>
                             <button
@@ -326,7 +326,7 @@ const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ items, onToggleSele
                             </button>
                             <button
                                 onClick={handleSaveEdit}
-                                className="px-8 py-3 bg-zf-blue text-white font-bold rounded-xl hover:bg-zf-lightBlue transition-all flex items-center gap-2 transform active:scale-95 shadow-lg shadow-zf-blue/20"
+                                className="px-8 py-3 bg-zf-cyan text-white font-semibold rounded-sm hover:bg-zf-lightBlue transition-colors flex items-center gap-2 uppercase tracking-wide text-sm shadow-md shadow-zf-cyan/20"
                             >
                                 <Save className="w-5 h-5" />
                                 Speichern

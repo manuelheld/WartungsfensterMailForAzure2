@@ -23,6 +23,29 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
     return `${daysDE[date.getDay()]} ${date.getDate()}. ${monthsDE[date.getMonth()]} ${date.getFullYear()}`;
   };
 
+  const formatDateTimeEN = (date: Date) => {
+    const time = date.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    return `${monthsEN[date.getMonth()]} ${getOrdinal(date.getDate())} ${date.getFullYear()}, ${time}`;
+  };
+
+  const formatDateTimeDE = (date: Date) => {
+    const time = date.toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit', hour12: false });
+    return `${date.getDate()}. ${monthsDE[date.getMonth()]} ${date.getFullYear()}, ${time} Uhr`;
+  };
+
+  // Find overall min and max dates
+  let minDate: Date | null = null;
+  let maxDate: Date | null = null;
+  selectedItems.forEach(item => {
+    // Falls item.startDate ein gültiges Datum ist, sonst nimm sortDate
+    const start = item.startDate || item.sortDate;
+    const end = item.endDate || item.sortDate;
+    if (!minDate || (start && start < minDate)) minDate = start;
+    if (!maxDate || (end && end > maxDate)) maxDate = end;
+  });
+  const validMinDate = minDate || new Date();
+  const validMaxDate = maxDate || new Date();
+
   // Group items by date string
   const groupedItems: { [key: string]: MaintenanceItem[] } = {};
   selectedItems.forEach(item => {
@@ -149,12 +172,19 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
   <div style="max-width: 900px; margin: 0 auto; padding: 30px 40px;">
     <p style="font-size: 15px;">
       <strong>Dear Ladies and Gentlemen,</strong><br/>
-      Sehr geehrte Damen und Herren,
+      <span style="color: gray; font-weight: bold;">Sehr geehrte Damen und Herren,</span>
     </p>
     
     <p style="margin-top: 15px; font-size: 15px;">
-      I would like to draw your attention to the upcoming IT maintenance window. Please plan your activities accordingly.<br/>
-      Ich möchte Sie auf das kommende IT-Wartungsfenster aufmerksam machen. Bitte planen Sie Ihre Aktivitäten entsprechend ein.
+      I would like to draw your attention to the upcoming IT maintenance window of ZF Information Technology, which will take place on<br/>
+      <strong>${formatDateTimeEN(validMinDate)} (CET) until ${formatDateTimeEN(validMaxDate)} (CET).</strong><br/>
+      <span style="color: gray;">Hiermit weise ich auf das anstehende IT-Wartungsfenster der ZF-Informatik hin, welches in der Zeit vom<br/>
+      <strong>${formatDateTimeDE(validMinDate)} (CET) bis ${formatDateTimeDE(validMaxDate)} (CET)</strong> stattfinden wird.</span>
+    </p>
+
+    <p style="margin-top: 25px; font-size: 15px;">
+      <span style="color: #0078D4;">Impact on IT-Services:</span><br/>
+      <span style="color: gray;">Auswirkungen auf die IT-Services:</span>
     </p>
     
     ${sectionsHtml}

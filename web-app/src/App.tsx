@@ -30,11 +30,20 @@ function App() {
                 
                 let username = null;
 
-                // Handle Azure Static Web Apps format
-                if (payload?.clientPrincipal?.userDetails) {
-                    username = payload.clientPrincipal.userDetails;
+                // Handle Azure format with clientPrincipal
+                if (payload && 'clientPrincipal' in payload) {
+                    if (payload.clientPrincipal === null) {
+                        username = "Not logged in";
+                    } else if (payload.clientPrincipal.userDetails) {
+                        username = payload.clientPrincipal.userDetails;
+                    } else if (payload.clientPrincipal.userId) {
+                        username = payload.clientPrincipal.userId;
+                    } else {
+                        const keys = Object.keys(payload.clientPrincipal || {}).join(', ');
+                        username = `CP Keys: ${keys}`.substring(0, 30);
+                    }
                 } 
-                // Handle Azure App Service format
+                // Handle Azure App Service array format
                 else if (Array.isArray(payload)) {
                     if (payload.length === 0) {
                         username = "Not logged in (Empty Array)";
@@ -54,9 +63,9 @@ function App() {
                             username = "No Name Claim Found";
                         }
                     }
-                } else if (typeof payload === 'object' && payload !== null) {
-                    // Handle case where Azure returns a single object instead of an array,
-                    // or a flat OpenID Connect UserInfo object
+                } 
+                // Handle flat UserInfo object
+                else if (typeof payload === 'object' && payload !== null) {
                     const claims = payload.claims || [];
                     const nameClaim = claims.find((c: any) => 
                         c.typ === 'name' || 
@@ -180,24 +189,22 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col font-sans selection:bg-zf-blue selection:text-white">
+        <div className="min-h-screen flex flex-col font-sans selection:bg-zf-cyan selection:text-white bg-zf-gray">
             {/* Fixed Top Header (72px) */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-zf-blue text-white shadow-xl h-[72px] flex items-center">
+            <header className="fixed top-0 left-0 right-0 z-50 bg-zf-blue text-white shadow-md h-[72px] flex items-center">
                 <div className="container mx-auto px-6 flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <div className="bg-white/10 p-2 rounded-lg">
-                            <CheckCircle2 className="w-6 h-6 text-white" />
-                        </div>
-                        <h1 className="text-2xl font-bold tracking-tight">IT Maintenance Window</h1>
+                    <div className="flex items-center gap-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/ZF_logo_STD_Blue_3CC.svg/250px-ZF_logo_STD_Blue_3CC.svg.png" width="40" alt="ZF Logo" className="filter brightness-0 invert" />
+                        <h1 className="text-xl font-semibold tracking-wide">IT Maintenance Window</h1>
                     </div>
                     <div className="flex items-center gap-6">
-                        <div className="text-sm font-bold opacity-70 uppercase tracking-[0.2em] hidden sm:block">
+                        <div className="text-sm font-bold text-zf-cyan uppercase tracking-[0.15em] hidden sm:block">
                             ZF Group
                         </div>
                         {currentUser && (
-                            <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl border border-white/10">
-                                <User className="w-4 h-4" />
-                                <span className="text-xs font-bold tracking-wide">{currentUser}</span>
+                            <div className="flex items-center gap-2 bg-zf-darkBlue/50 px-4 py-2 rounded-sm border border-zf-cyan/30">
+                                <User className="w-4 h-4 text-zf-cyan" />
+                                <span className="text-xs font-semibold tracking-wide">{currentUser}</span>
                             </div>
                         )}
                     </div>
@@ -209,14 +216,14 @@ function App() {
                 {items.length === 0 ? (
                     <>
                         {/* Landing State */}
-                        <section className="text-center space-y-6 pt-10 pb-4">
-                            <div className="inline-block px-4 py-1.5 bg-zf-blue/10 text-zf-blue text-sm font-bold rounded-full uppercase tracking-wider mb-2">
-                                Tech BRM's are the best
+                        <section className="text-center space-y-4 pt-12 pb-8">
+                            <div className="inline-block px-4 py-1.5 bg-zf-cyan/10 text-zf-darkBlue text-xs font-bold uppercase tracking-widest border border-zf-cyan/20">
+                                Tech BRM Tooling
                             </div>
-                            <h2 className="text-5xl font-black text-gray-900 tracking-tight leading-tight">
-                                Maintenance Mail <span className="text-zf-blue italic underline decoration-zf-blue/20">Generator</span>
+                            <h2 className="text-4xl font-light text-zf-darkBlue tracking-tight leading-tight">
+                                Maintenance Mail <span className="font-bold text-zf-blue border-b-2 border-zf-cyan">Generator</span>
                             </h2>
-                            <p className="text-gray-500 text-xl max-w-2xl mx-auto font-medium leading-relaxed">
+                            <p className="text-gray-500 text-lg max-w-2xl mx-auto font-normal leading-relaxed">
                                 Konvertiert den Daily BRM IT Change Report effizient in professionell formatierte E-Mails für die weltweite Kommunikation.
                             </p>
                         </section>
@@ -241,16 +248,19 @@ function App() {
             </main>
 
             {/* Footer */}
-            <footer className="py-10 bg-white border-t border-gray-100 mt-20">
-                <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="text-gray-400 text-sm font-semibold uppercase tracking-widest">
-                        &copy; {new Date().getFullYear()} ZF Group - IT INF Maintenance Management
+            <footer className="py-8 bg-zf-darkBlue text-white mt-auto border-t-4 border-zf-cyan">
+                <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 border-b border-white/10 pb-6 mb-6">
+                    <div className="flex items-center gap-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/ZF_logo_STD_Blue_3CC.svg/250px-ZF_logo_STD_Blue_3CC.svg.png" width="60" alt="ZF Logo" className="filter brightness-0 invert" />
                     </div>
-                    <div className="flex gap-8 text-sm font-bold text-gray-400">
-                        <span className="hover:text-zf-blue cursor-pointer transition-colors">Privacy</span>
-                        <span className="hover:text-zf-blue cursor-pointer transition-colors">Support</span>
-                        <span className="hover:text-zf-blue cursor-pointer transition-colors">Standards</span>
+                    <div className="flex gap-8 text-xs font-semibold text-gray-300 uppercase tracking-widest">
+                        <span className="hover:text-zf-cyan cursor-pointer transition-colors">Privacy</span>
+                        <span className="hover:text-zf-cyan cursor-pointer transition-colors">Support</span>
+                        <span className="hover:text-zf-cyan cursor-pointer transition-colors">Standards</span>
                     </div>
+                </div>
+                <div className="container mx-auto px-6 text-center text-[10px] text-gray-400 uppercase tracking-widest">
+                    &copy; {new Date().getFullYear()} ZF Group - IT INF Maintenance Management
                 </div>
             </footer>
 
