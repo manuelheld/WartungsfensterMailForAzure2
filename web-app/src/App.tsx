@@ -50,7 +50,7 @@ function App() {
                     const sortDate = new Date(item.sortDate);
                     const startDate = item.startDate ? new Date(item.startDate) : undefined;
                     const endDate = item.endDate ? new Date(item.endDate) : undefined;
-                    
+
                     // Force re-calculation of timeDisplay to ensure correct AM/PM format
                     let timeDisplay = item.timeDisplay;
                     const start = formatToAMPM(startDate || item.startDateTime);
@@ -146,38 +146,38 @@ function App() {
 
             {/* Content Area - Offset exactly by Header Height (72px) */}
             <main className="flex-1 mt-[72px] container mx-auto px-6 max-w-7xl pt-8">
-                    {items.length === 0 ? (
-                        <>
-                            {/* Landing State */}
-                            <section className="text-center space-y-6 pt-10 pb-4">
-                                <div className="inline-block px-4 py-1.5 bg-zf-blue/10 text-zf-blue text-sm font-bold rounded-full uppercase tracking-wider mb-2">
-                                    Digital Transformation
-                                </div>
-                                <h2 className="text-5xl font-black text-gray-900 tracking-tight leading-tight">
-                                    Maintenance Mail <span className="text-zf-blue italic underline decoration-zf-blue/20">Generator</span>
-                                </h2>
-                                <p className="text-gray-500 text-xl max-w-2xl mx-auto font-medium leading-relaxed">
-                                    Konvertieren Sie Ihre Wartungsplanung effizient in professionell formatierte E-Mails für die weltweite Kommunikation.
-                                </p>
-                            </section>
+                {items.length === 0 ? (
+                    <>
+                        {/* Landing State */}
+                        <section className="text-center space-y-6 pt-10 pb-4">
+                            <div className="inline-block px-4 py-1.5 bg-zf-blue/10 text-zf-blue text-sm font-bold rounded-full uppercase tracking-wider mb-2">
+                                Tech BRM's are the best
+                            </div>
+                            <h2 className="text-5xl font-black text-gray-900 tracking-tight leading-tight">
+                                Maintenance Mail <span className="text-zf-blue italic underline decoration-zf-blue/20">Generator</span>
+                            </h2>
+                            <p className="text-gray-500 text-xl max-w-2xl mx-auto font-medium leading-relaxed">
+                                Konvertiert den Daily BRM IT Change Report effizient in professionell formatierte E-Mails für die weltweite Kommunikation.
+                            </p>
+                        </section>
 
-                            <ExcelUploader
-                                onDataLoaded={handleDataLoaded}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                                hasStoredData={storedItems !== null}
-                                onRestore={handleRestore}
-                            />
-                        </>
-                    ) : (
-                        <MaintenanceTable
-                            items={items}
-                            onToggleSelect={handleToggleSelect}
-                            onGenerateEmail={handleGenerateEmail}
-                            onItemUpdate={handleItemUpdate}
-                            onBack={handleBack}
+                        <ExcelUploader
+                            onDataLoaded={handleDataLoaded}
+                            isLoading={isLoading}
+                            setIsLoading={setIsLoading}
+                            hasStoredData={storedItems !== null}
+                            onRestore={handleRestore}
                         />
-                    )}
+                    </>
+                ) : (
+                    <MaintenanceTable
+                        items={items}
+                        onToggleSelect={handleToggleSelect}
+                        onGenerateEmail={handleGenerateEmail}
+                        onItemUpdate={handleItemUpdate}
+                        onBack={handleBack}
+                    />
+                )}
             </main>
 
             {/* Footer */}
