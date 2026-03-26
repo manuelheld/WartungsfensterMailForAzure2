@@ -3,6 +3,29 @@ import ouSitesData from '../data/ouSites.json';
 import { zfLogoBase64 } from './zfLogoBase64';
 import { formatToAMPM } from '../utils/timeUtils';
 
+const getTimeZoneByDate = (date: Date): "CET" | "CEST" => {
+  const month = date.getMonth() + 1;
+  if (month > 3 && month < 10) return 'CEST';
+  if (month < 3 || month > 10) return 'CET';
+  
+  const getPrevSunday = (y: number, m: number) => {
+    let d = new Date(y, m, 0);
+    d.setDate(d.getDate() - d.getDay());
+    return d.getDate();
+  };
+  
+  const dateNum = date.getDate();
+  if (month === 3) {
+    const lastSun = getPrevSunday(date.getFullYear(), 3);
+    return dateNum >= lastSun ? 'CEST' : 'CET';
+  }
+  if (month === 10) {
+    const lastSun = getPrevSunday(date.getFullYear(), 10);
+    return dateNum < lastSun ? 'CEST' : 'CET';
+  }
+  return 'CET';
+};
+
 const ouSites: Record<string, string[]> = ouSitesData;
 
 export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivision: string = 'Alle'): string => {
@@ -44,8 +67,14 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
     if (!minDate || (start && start < minDate)) minDate = start;
     if (!maxDate || (end && end > maxDate)) maxDate = end;
   });
-  const validMinDate = minDate || new Date();
-  const validMaxDate = maxDate || new Date();
+  const validMinDate = minDate ? new Date(minDate) : new Date();
+  validMinDate.setHours(14, 0, 0, 0);
+  
+  const validMaxDate = maxDate ? new Date(maxDate) : new Date();
+  validMaxDate.setHours(19, 0, 0, 0);
+
+  const tzMin = getTimeZoneByDate(validMinDate);
+  const tzMax = getTimeZoneByDate(validMaxDate);
 
   // Group items by date string
   const groupedItems: { [key: string]: MaintenanceItem[] } = {};
@@ -132,7 +161,7 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
           <thead>
             <tr style="text-align: left; color: #0078D4; font-size: 16px;">
               <th style="padding-bottom: 10px; border-bottom: 2px solid #0078D4; font-weight: 500;">Location / CRQ</th>
-              <th style="padding-bottom: 10px; border-bottom: 2px solid #0078D4; font-weight: 500; padding-left: 10px;">Time (CET)</th>
+              <th style="padding-bottom: 10px; border-bottom: 2px solid #0078D4; font-weight: 500; padding-left: 10px;">Time (${tzMin})</th>
               <th style="padding-bottom: 10px; border-bottom: 2px solid #0078D4; font-weight: 500; padding-left: 10px;">Service</th>
               <th style="padding-bottom: 10px; border-bottom: 2px solid #0078D4; font-weight: 500; padding-left: 10px;">Downtime</th>
               <th style="padding-bottom: 10px; border-bottom: 2px solid #0078D4; font-weight: 500;">Description</th>
@@ -191,9 +220,9 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
     
     <p style="margin-top: 15px; font-size: 15px;">
       I would like to draw your attention to the upcoming IT maintenance window of ZF Information Technology, which will take place on<br/>
-      <strong>${formatDateTimeEN(validMinDate)} (CET) until ${formatDateTimeEN(validMaxDate)} (CET).</strong><br/>
+      <strong>${formatDateTimeEN(validMinDate)} (${tzMin}) until ${formatDateTimeEN(validMaxDate)} (${tzMax}).</strong><br/>
       <span style="color: gray;">Hiermit weise ich auf das anstehende IT-Wartungsfenster der ZF-Informatik hin, welches in der Zeit vom<br/>
-      <strong>${formatDateTimeDE(validMinDate)} (CET) bis ${formatDateTimeDE(validMaxDate)} (CET)</strong> stattfinden wird.</span>
+      <strong>${formatDateTimeDE(validMinDate)} (${tzMin}) bis ${formatDateTimeDE(validMaxDate)} (${tzMax})</strong> stattfinden wird.</span>
     </p>
 
     <p style="margin-top: 25px; font-size: 15px;">
