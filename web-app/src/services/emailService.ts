@@ -74,16 +74,16 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
       // Filter locations based on division (mirror logic from Table)
       const displayLocations = (item.locations || [])
         .filter(loc => {
-           if (selectedDivision === 'Alle') return true;
-           if (loc.toUpperCase().trim() === 'ALL') return true;
-           const divLocs = ouSites[selectedDivision] || [];
-           return divLocs.some(d => d.toUpperCase() === loc.trim().toUpperCase());
+          if (selectedDivision === 'Alle') return true;
+          if (loc.toUpperCase().trim() === 'ALL') return true;
+          const divLocs = ouSites[selectedDivision] || [];
+          return divLocs.some(d => d.toUpperCase() === loc.trim().toUpperCase());
         })
         .join(', ');
 
       // Final safety: even if timeDisplay is messy, try to extract clean AM/PM times
       let preciseTime = item.timeDisplay || '-';
-      if (preciseTime.length > 20) { 
+      if (preciseTime.length > 20) {
         const parts = preciseTime.split(/\s*[–-]\s*/);
         if (parts.length === 2) {
           const start = formatToAMPM(parts[0]);
@@ -210,7 +210,7 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
 
     <div style="margin-bottom: 30px;">
       <a href="https://trw1.sharepoint.com/sites/inet/corporatepages/Pages/CorporatePages/EcuLrpx5vgFdGCT4LR02Q/005d47d7-1714-4a23-8cb2-bc2fd15f3baa.aspx" style="display: inline-block; text-align: center; text-decoration: none;">
-        <img src="https://img.icons8.com/external-flat-icons-inmotus-design/67/external-Calendar-event-flat-icons-inmotus-design-14.png" alt="Calendar" width="45" style="display: block; margin: 0 auto 5px auto; border: none; filter: hue-rotate(180deg);" />
+       
         <span style="color: #00AAC8; font-size: 13px; text-decoration: underline;">Release Window Calendar</span>
       </a>
     </div>
