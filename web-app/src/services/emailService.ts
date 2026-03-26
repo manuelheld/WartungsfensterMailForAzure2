@@ -203,10 +203,34 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
     
     ${sectionsHtml}
     
-    <p style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; color: #666; font-size: 13px;">
-      Best regards / Mit freundlichen Grüßen,<br/>
-                        <strong>ZF Group - IT Maintenance Team</strong>
-                      </p>
+    <div style="margin-top: 40px; margin-bottom: 30px; font-size: 14px;">
+      In general, <strong>no IT service</strong> will be guaranteed during the maintenance window (risk time).<br/>
+      <span style="color: gray;">Generell gilt, dass für den gesamten Zeitraum des Wartungsfensters <strong>kein IT-Service</strong> gewährleistet wird (Risikozeit).</span>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+      <a href="https://trw1.sharepoint.com/sites/inet/corporatepages/Pages/CorporatePages/EcuLrpx5vgFdGCT4LR02Q/005d47d7-1714-4a23-8cb2-bc2fd15f3baa.aspx" style="display: inline-block; text-align: center; text-decoration: none;">
+        <img src="https://img.icons8.com/external-flat-icons-inmotus-design/67/external-Calendar-event-flat-icons-inmotus-design-14.png" alt="Calendar" width="45" style="display: block; margin: 0 auto 5px auto; border: none; filter: hue-rotate(180deg);" />
+        <span style="color: #00AAC8; font-size: 13px; text-decoration: underline;">Release Window Calendar</span>
+      </a>
+    </div>
+
+    <div style="font-size: 14px; line-height: 1.5; margin-bottom: 30px; color: #333;">
+      Please – if necessary and if not already done – take the appropriate measures in your areas and forward this information to all potentially affected employees.<br/>
+      In case of any questions, please feel free to contact us.<br/>
+      <br/>
+      <span style="color: gray;">
+        Wir bitten Sie – falls erforderlich und noch nicht geschehen – entsprechende Vorkehrungen in Ihren Fachbereichen zu treffen.<br/>
+        Bitte leiten Sie die Information an alle betroffenen Mitarbeiter Ihres Zuständigkeitsbereichs weiter.<br/>
+        Für Rückfragen stehen wir gerne zur Verfügung!
+      </span>
+    </div>
+
+    <p style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; color: #333; font-size: 14px;">
+      Mit freundlichen Grüßen/Kind regards<br/>
+      Manuel Held<br/><br/>
+      IT Business Relationship Management– Division I (FIBI)
+    </p>
                     </div>
                   </td>
                 </tr>
