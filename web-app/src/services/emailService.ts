@@ -175,8 +175,13 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
     `;
   }).join('');
 
+  const subjectTitle = `IT Maintenance Window ${monthsEN[monthIdx]} ${year} - IT Wartungsfenster ${monthsDE[monthIdx]} ${year}`;
+
   return `
 <html>
+<head>
+  <meta name="subject" content="${subjectTitle}">
+</head>
 <body style="font-family: Tahoma, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 0; background-color: #f5f5f7;">
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f5f5f7; padding: 40px 20px;">
     <tr>
@@ -278,7 +283,9 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
 export const generateEml = (html: string): string => {
   const boundary = `----=_NextPart_${Math.random().toString(36).slice(2)}`;
   const relatedBoundary = `----=_RelatedPart_${Math.random().toString(36).slice(2)}`;
-  const subject = "IT Maintenance Window / IT - Wartungsfenster";
+  
+  const match = html.match(/<meta name="subject" content="([^"]+)">/);
+  const subject = match ? match[1] : "IT Maintenance Window / IT - Wartungsfenster";
 
   return [
     `Subject: ${subject}`,
