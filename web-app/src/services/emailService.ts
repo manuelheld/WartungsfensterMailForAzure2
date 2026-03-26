@@ -156,10 +156,13 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
         <table width="800" cellpadding="0" cellspacing="0" border="0" style="background-color: white; border: 1px solid #d1d5db; border-radius: 4px; max-width: 800px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
           <tr>
             <td>
-              <!-- Header with ZF Logo and dynamic titles -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding: 20px 40px; background-color: white; border-bottom: 2px solid #002D58;">
-    <tr>
-      <td width="80" align="left" style="vertical-align: middle;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding: 20px 40px; border-bottom: 2px solid #002D58; background-color: white;">
+                    <!-- Header with ZF Logo and dynamic titles -->
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td width="80" align="left" style="vertical-align: middle;">
         <img src="cid:zf-logo" width="80" alt="ZF Logo" style="display: block; border: 0;" />
       </td>
       <td align="left" style="padding: 0 40px; vertical-align: middle;">
@@ -174,12 +177,15 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
             ${monthsDE[monthIdx]} ${year}
         </div>
       </td>
-    </tr>
-  </table>
-  
-  <div style="max-width: 900px; margin: 0 auto; padding: 30px 40px;">
-    <p style="font-size: 15px;">
-      <strong>Dear Ladies and Gentlemen,</strong><br/>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 30px 40px; background-color: white;">
+                    <div style="max-width: 900px; margin: 0 auto;">
+                      <p style="font-size: 15px;">
+                        <strong>Dear Ladies and Gentlemen,</strong><br/>
       <span style="color: gray; font-weight: bold;">Sehr geehrte Damen und Herren,</span>
     </p>
     
@@ -199,9 +205,12 @@ export const generateEmailHtml = (selectedItems: MaintenanceItem[], selectedDivi
     
     <p style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; color: #666; font-size: 13px;">
       Best regards / Mit freundlichen Grüßen,<br/>
-      <strong>ZF Group - IT Maintenance Team</strong>
-    </p>
-  </div>
+                        <strong>ZF Group - IT Maintenance Team</strong>
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
         </table>
@@ -220,6 +229,7 @@ export const generateEml = (html: string): string => {
 
   return [
     `Subject: ${subject}`,
+    'X-Unsent: 1',
     'MIME-Version: 1.0',
     `Content-Type: multipart/related; boundary="${relatedBoundary}"`,
     '',
